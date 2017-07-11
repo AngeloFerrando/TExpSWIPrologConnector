@@ -3,6 +3,7 @@ package it.dibris.unige.TExpSWIPrologConnector.JPL;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -71,6 +72,22 @@ public class JPLInitializer {
 		
 		String pathToLibrary = "./src/main/resources/prolog-code/library.pl";
 		String pathToDecAMon = "./src/main/resources/prolog-code/decamon.pl";
+		
+		try {
+			File lib = new File(JPLInitializer.class.getResource(pathToLibrary).toURI());
+			File dec = new File(JPLInitializer.class.getResource(pathToDecAMon).toURI());
+			if(lib != null){
+				System.out.println("ciao1");
+				System.exit(0);
+			}
+			if(dec != null){
+				System.out.println("ciao2");
+				System.exit(0);
+			}
+		} catch (URISyntaxException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		if(!new File(pathToLibrary).exists()){ 
 		    throw new FileNotFoundException("library.pl not found");
