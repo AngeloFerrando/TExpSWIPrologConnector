@@ -14,7 +14,8 @@ it/dibris/unige/TExpSWIPrologConnector/exceptions/EnvironmentVariableNotDefinedE
 it/dibris/unige/TExpSWIPrologConnector/JPL/JPLInitializer.class
 it/dibris/unige/TExpSWIPrologConnector/exceptions/TraceExpressionFileFormatException.class
 it/dibris/unige/TExpSWIPrologConnector/texp/TraceExpression$1.class
-it/dibris/unige/TExpSWIPrologConnector/Boot.class
 it/dibris/unige/TExpSWIPrologConnector/decentralized/PartitionType.class
 it/dibris/unige/TExpSWIPrologConnector/exceptions/PrologPredicateFailedException.class
+it/dibris/unige/TExpSWIPrologConnector/exceptions/InitializationException.class
+it/dibris/unige/TExpSWIPrologConnector/Connector.class
 it/dibris/unige/TExpSWIPrologConnector/exceptions/JPLInitializationException.class
