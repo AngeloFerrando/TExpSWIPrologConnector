@@ -29,6 +29,7 @@ public class Connector {
 			roles += role + ",";
 		}
 		roles = roles.substring(0, roles.length() - 1) + "]";
+		System.out.println(roles);
 		String t1 = "initialize('" + logFileName + "'," + "'" + monitorID + "'," + roles + ", " + tExp.getProtocolName() + ")";
         System.out.println(t1);
         Query q1 = null;
