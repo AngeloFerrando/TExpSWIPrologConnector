@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
+
 import org.jpl7.Atom;
 import org.jpl7.Compound;
 import org.jpl7.PrologException;
@@ -110,6 +113,24 @@ public class TraceExpression {
 		if(!(areEventsAtomic() || areEventsAsync())){
 			throw new TraceExpressionNeitherAtomicNorAsyncEventTypesException();
 		}
+	}
+	
+	/**
+	 * Return the set of roles involved in the trace expression
+	 * 
+	 * @return the set
+	 */
+	public Set<String> involvedRoles(){
+		Query query = new Query("involved(InvolvedRoles, " + protocolName + ")");
+		Set<String> roles = new TreeSet<>();
+		if(query.hasSolution()){
+			Term invRolesTerm = query.oneSolution().get("InvolvedRoles");
+			List<Term> invRolesTermList = JPLInitializer.fromCompoundToList(invRolesTerm);
+			for(Term role : invRolesTermList){
+				roles.add(role.toString());
+			}
+		}
+		return roles;
 	}
 
 	/**
