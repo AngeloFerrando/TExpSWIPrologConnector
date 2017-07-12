@@ -1,9 +1,17 @@
 package it.dibris.unige.TExpSWIPrologConnector.JPL;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -73,28 +81,39 @@ public class JPLInitializer {
 		String pathToLibrary = "./src/main/resources/prolog-code/library.pl";
 		String pathToDecAMon = "./src/main/resources/prolog-code/decamon.pl";
 		
-		try {
-			File lib = new File(JPLInitializer.class.getResource(pathToLibrary).toURI());
-			File dec = new File(JPLInitializer.class.getResource(pathToDecAMon).toURI());
-			if(lib != null){
-				System.out.println("ciao1");
-				System.exit(0);
-			}
-			if(dec != null){
-				System.out.println("ciao2");
-				System.exit(0);
-			}
-		} catch (URISyntaxException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		/*
+		 * - Check for nested dependency (jpl inside TExpSWIPrologConnector.jar)
+		 * - Check get resource from the jar
+		 * - Check consult of that resource (maybe creating tmp file for the consult)
+		 * */
 		
-		if(!new File(pathToLibrary).exists()){ 
-		    throw new FileNotFoundException("library.pl not found");
-		}
+		URL libRes = JPLInitializer.class.getResource("/prolog-code/library.pl");
+		URL decRes = JPLInitializer.class.getResource("/prolog-code/decamon.pl");
 		
-		if(!new File(pathToDecAMon).exists()){ 
-		    throw new FileNotFoundException("decamon.pl not found");
+	
+		//File lib = new File(JPLInitializer.class.getResource("/prolog-code/library.pl").getPath());
+		//File dec = new File(JPLInitializer.class.getResource("/prolog-code/decamon.pl").getPath());
+		if(libRes != null && decRes != null){
+			pathToLibrary = libRes.getPath();
+			pathToDecAMon = decRes.getPath();
+			try {
+				pathToLibrary = ExportResource("/prolog-code/", "library.pl");
+			} catch (Exception e) {
+				throw new FileNotFoundException("library.pl resource not found");
+			}
+			try {
+				pathToDecAMon = ExportResource("/prolog-code/", "decamon.pl");
+			} catch (Exception e) {
+				throw new FileNotFoundException("decamon.pl resource not found");
+			}
+		} else{
+			if(!new File(pathToLibrary).exists()){ 
+			    throw new FileNotFoundException("library.pl not found");
+			}
+			
+			if(!new File(pathToDecAMon).exists()){ 
+			    throw new FileNotFoundException("decamon.pl not found");
+			}
 		}
 		
 		try{
@@ -104,6 +123,44 @@ public class JPLInitializer {
 			throw new JPLInitializationException(e);
 		}
 	}
+	
+	/**
+     * Export a resource embedded into a Jar file to the local file path.
+     *
+     * @param resourceName ie.: "/SmartLibrary.dll"
+     * @return The path to the exported resource
+     * @throws Exception
+     */
+    static private String ExportResource(String resourcePath, String resourceName) throws Exception {
+        BufferedReader br = null;
+        //OutputStream resStreamOut = null;
+        FileWriter fw = null;
+        String jarFolder;
+        try {
+            InputStream stream = JPLInitializer.class.getResourceAsStream(resourcePath + resourceName);//note that each / is a directory down in the "jar tree" been the jar the root of the tree
+            
+            if(stream == null){
+        		throw new Exception("Cannot get resource \"" + resourceName + "\" from Jar file.");
+        	}
+            
+            jarFolder = new File(JPLInitializer.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParentFile().getPath().replace('\\', '/');
+            br = new BufferedReader(new InputStreamReader(stream));
+            fw = new FileWriter(jarFolder + "/" + resourceName);
+            String line = br.readLine();
+            while(line != null){
+            	fw.write(line + "\n");
+            	line = br.readLine();
+            }
+        } catch (Exception ex) {
+        	ex.printStackTrace();
+            throw ex;
+        } finally {
+            br.close();
+            if(fw != null){ fw.close(); }
+        }
+
+        return jarFolder + "/" + resourceName;
+    }
 
 	/**
 	 * convert a compound term to the corresponding list of terms
