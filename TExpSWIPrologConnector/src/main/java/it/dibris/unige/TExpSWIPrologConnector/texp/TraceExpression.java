@@ -99,6 +99,8 @@ public class TraceExpression {
 	/**
 	 * Load the trace expression inside the SWI-Prolog environment.
 	 *
+	 * @param tExpFilePath path to the trace expression prolog file 
+	 *
 	 * @throws PrologException if an error occurred during the communication with SWI-Prolog
 	 * @throws TraceExpressionNotContractiveException if the trace expression is not contractive
 	 * @throws TraceExpressionNeitherAtomicNorAsyncEventTypesException if the trace expression does not contain only atomic event types (or only async event types)

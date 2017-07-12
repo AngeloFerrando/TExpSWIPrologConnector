@@ -17,7 +17,7 @@ public class ConditionsFactory {
 	 * @param maxNumberSingletons is the maximum number of singletons allowed
 	 * @return the corresponding condition
 	 *
-	 * @throws IllegalArgumentException if <code>minNumberSingletons</code> > <code>maxNumberSingletons</code>
+	 * @throws IllegalArgumentException if <code>minNumberSingletons</code> is greater than <code>maxNumberSingletons</code>
 	 */
 	public static Condition<String> createNumberSingletonsCondition(int minNumberSingletons, int maxNumberSingletons){
 		if(minNumberSingletons > maxNumberSingletons){
@@ -59,7 +59,7 @@ public class ConditionsFactory {
 	 * @param maxNumberAgentsForConstraint is the maximum number of agents for single constraint allowed
 	 * @return the corresponding condition
 	 *
-	 * @throws IllegalArgumentException if <code>minNumberAgentsForConstraint</code> > <code>maxNumberAgentsForConstraint</code>
+	 * @throws IllegalArgumentException if <code>minNumberAgentsForConstraint</code> is greater than <code>maxNumberAgentsForConstraint</code>
 	 */
 	public static Condition<String> createNumberAgentsForConstraintCondition(int minNumberAgentsForConstraint, int maxNumberAgentsForConstraint){
 		if(minNumberAgentsForConstraint > maxNumberAgentsForConstraint){
@@ -98,7 +98,7 @@ public class ConditionsFactory {
 	 * @param maxNumberCostraints is the maximum number of constraints inside the partition allowed
 	 * @return the corresponding condition
 	 *
-	 * @throws IllegalArgumentException if <code>minNumberCostraints</code> > <code>maxNumberCostraints</code>
+	 * @throws IllegalArgumentException if <code>minNumberCostraints</code> is greater than <code>maxNumberCostraints</code>
 	 */
 	public static Condition<String> createNumberOfConstraintsCondition(int minNumberCostraints, int maxNumberCostraints){
 		if(minNumberCostraints > maxNumberCostraints){

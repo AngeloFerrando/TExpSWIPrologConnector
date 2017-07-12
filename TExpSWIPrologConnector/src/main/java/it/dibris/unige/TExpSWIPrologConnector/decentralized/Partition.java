@@ -48,6 +48,7 @@ public class Partition<T> implements Iterable<Set<T>>{
 	
 	/**
 	 * Add a new element to the partition (inside a new constraint)
+	 * @param <E> type of the element
 	 * @param elem is the element to add
 	 * 
 	 * @throws NullPointerException if elem is null
@@ -133,7 +134,7 @@ public class Partition<T> implements Iterable<Set<T>>{
 	 * @param maxSize is the maximum number of elements in the constraints
 	 * @return the number of constraint with at least <code>minSize</code> and at most <code>maxSize</code> elements
 	 * 
-	 * @throws IllegalArgumentException if <code>minSize</code> > <code>maxSize</code>
+	 * @throws IllegalArgumentException if <code>minSize</code> is greater than <code>maxSize</code>
 	 */
 	public int getNumberConstraintsBetweenSize(int minSize, int maxSize){
 		if(minSize > maxSize){
@@ -169,6 +170,7 @@ public class Partition<T> implements Iterable<Set<T>>{
 	/**
 	 * Add a new constraint inside the partition.
 	 * If one of (or both) element belongs already to a constraint it will be done a fusion of constraints.
+	 * @param <E> type of constraint
 	 * @param elem1 first element
 	 * @param elem2 second element
 	 * 
@@ -214,7 +216,8 @@ public class Partition<T> implements Iterable<Set<T>>{
 	
 	/**
 	 * If <code>elem</code> belongs to the partition, separate it from the other and add it to a single new constraint.
-	 * @param elem
+	 * @param <E> type of element
+	 * @param elem to make independent (all the constraints associated will be removed)
 	 * 
 	 * @throws NullPointerException if <code>elem</code> is null 
 	 */

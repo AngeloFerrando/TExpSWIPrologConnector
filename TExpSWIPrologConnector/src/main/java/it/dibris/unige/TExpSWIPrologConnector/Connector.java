@@ -26,7 +26,7 @@ public class Connector {
 		Set<String> roleSet = tExp.involvedRoles();
 		String roles = "[";
 		for(String role : roleSet){
-			roles += role + ", ";
+			roles += role + ",";
 		}
 		roles = roles.substring(0, roles.length() - 1) + "]";
 		String t1 = "initialize('" + logFileName + "'," + "'" + monitorID + "'," + roles + ", " + tExp.getProtocolName() + ")";

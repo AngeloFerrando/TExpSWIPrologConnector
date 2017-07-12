@@ -3,9 +3,10 @@
 /Users/angeloferrando/git/TExpSWIPrologConnector/TExpSWIPrologConnector/src/main/java/it/dibris/unige/TExpSWIPrologConnector/decentralized/Condition.java
 /Users/angeloferrando/git/TExpSWIPrologConnector/TExpSWIPrologConnector/src/main/java/it/dibris/unige/TExpSWIPrologConnector/exceptions/TraceExpressionFileFormatException.java
 /Users/angeloferrando/git/TExpSWIPrologConnector/TExpSWIPrologConnector/src/main/java/it/dibris/unige/TExpSWIPrologConnector/exceptions/EnvironmentVariableNotDefinedException.java
+/Users/angeloferrando/git/TExpSWIPrologConnector/TExpSWIPrologConnector/src/main/java/it/dibris/unige/TExpSWIPrologConnector/Connector.java
+/Users/angeloferrando/git/TExpSWIPrologConnector/TExpSWIPrologConnector/src/main/java/it/dibris/unige/TExpSWIPrologConnector/exceptions/InitializationException.java
 /Users/angeloferrando/git/TExpSWIPrologConnector/TExpSWIPrologConnector/src/main/java/it/dibris/unige/TExpSWIPrologConnector/exceptions/JavaLibraryPathException.java
 /Users/angeloferrando/git/TExpSWIPrologConnector/TExpSWIPrologConnector/src/main/java/it/dibris/unige/TExpSWIPrologConnector/decentralized/PartitionType.java
-/Users/angeloferrando/git/TExpSWIPrologConnector/TExpSWIPrologConnector/src/main/java/it/dibris/unige/TExpSWIPrologConnector/Boot.java
 /Users/angeloferrando/git/TExpSWIPrologConnector/TExpSWIPrologConnector/src/main/java/it/dibris/unige/TExpSWIPrologConnector/exceptions/DecentralizedPartitionNotFoundException.java
 /Users/angeloferrando/git/TExpSWIPrologConnector/TExpSWIPrologConnector/src/main/java/it/dibris/unige/TExpSWIPrologConnector/exceptions/JPLInitializationException.java
 /Users/angeloferrando/git/TExpSWIPrologConnector/TExpSWIPrologConnector/src/main/java/it/dibris/unige/TExpSWIPrologConnector/exceptions/TraceExpressionNeitherAtomicNorAsyncEventTypesException.java

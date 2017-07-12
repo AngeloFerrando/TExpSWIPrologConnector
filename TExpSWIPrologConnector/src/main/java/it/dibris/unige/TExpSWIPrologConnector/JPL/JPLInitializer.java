@@ -2,19 +2,16 @@ package it.dibris.unige.TExpSWIPrologConnector.JPL;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.lang.reflect.Field;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import org.jpl7.Atom;
 import org.jpl7.JPL;
 import org.jpl7.PrologException;
@@ -56,7 +53,7 @@ public class JPLInitializer {
 	/**
 	 * initialize the JPL environment
 	 * 
-	 * throws PrologException
+	 * @throws PrologException if an error occurred during the communication with SWI-Prolog
 	 * @throws FileNotFoundException if library.pl or decamon.pl files are not found
 	 */
 	public static void init() throws FileNotFoundException{
