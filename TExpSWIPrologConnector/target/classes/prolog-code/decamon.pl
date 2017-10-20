@@ -178,6 +178,8 @@ last_it(T1|T2, Last, A) :-
   union(Last1, Last2, Last).
 last_it(T1*T2, Last, A) :-
   put_assoc(T1*T2, A, _, A1),
+  last_it(T1, Last1, A1),
+  Last1 \= [],
   last_it(T2, Last, A1).
 last_it(T1/\T2, Last, A) :-
   put_assoc(T1/\T2, A, _, A1),

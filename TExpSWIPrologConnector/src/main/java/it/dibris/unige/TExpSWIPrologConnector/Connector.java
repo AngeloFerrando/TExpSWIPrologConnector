@@ -22,8 +22,8 @@ public class Connector {
 	 * 
 	 * @throws PrologException if an error occurred during the execution of the query
 	 */
-	public static void initialize(TraceExpression tExp, String logFileName, String monitorID){
-		Set<String> roleSet = tExp.involvedRoles();
+	public static void initialize(TraceExpression tExp, String logFileName, String monitorID, Set<String> roleSet){
+		//Set<String> roleSet = tExp.involvedRoles();
 		String roles = "[";
 		for(String role : roleSet){
 			roles += role + ",";
