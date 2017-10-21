@@ -505,7 +505,7 @@ get_monitoring_safe(P, ProtocolName) :-
   trace_expression(ProtocolName, T),
   involved(T, InvolvedAgents, ProtocolName),
   findall([A], member(A, InvolvedAgents), InvolvedAgents1),
-  partitions(InvolvedAgents1, P),
+  permutations(InvolvedAgents1, P),
   is_monitoring_safe(P, ProtocolName).
 
 

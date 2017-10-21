@@ -299,13 +299,18 @@ public class TraceExpression {
 		while(query.hasMoreSolutions()){
 			Compound partitionTerm = (Compound) query.nextSolution().get("MSPartition");
 			Partition<String> partitionAux = Partition.extractOnePartitionFromTerm(partitionTerm);
+			boolean good = true;
 			for(Condition<String> cond : conditions){
-				if(cond.isConsistent(partitionAux)){
-					lastGoodPartition = partitionAux;
-					if(new Random().nextBoolean()){
-						query.close();
-						return partitionAux;
-					}
+				if(!cond.isConsistent(partitionAux)){
+					good = false;
+					break;
+				}
+			}
+			if(good){
+				lastGoodPartition = partitionAux;
+				if(new Random().nextBoolean()){
+					query.close();
+					return partitionAux;
 				}
 			}
 		}
