@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -261,13 +260,13 @@ public class TraceExpression {
 	}*/
 
 	/**
-	 * Get a random Monitoring Safe partition
+	 * Get a random pseudo Minimal Monitoring Safe partition
 	 * @param conditions that must be satisfied by the partition returned
 	 * @return the monitoring safe partition selected randomly
 	 *
 	 * @throws NoMonitoringSafePartitionFoundException if no monitoring safe partition can be retrieved
 	 */
-	public Partition<String> getRandomMonitoringSafePartition(List<Condition<String>> conditions) throws NoMonitoringSafePartitionFoundException{
+	public Partition<String> getRandomPseudoMinimalMonitoringSafePartition(List<Condition<String>> conditions) throws NoMonitoringSafePartitionFoundException{
 		/*if(conditions == null){
 			throw new NullPointerException("conditions must not be null");
 		}*/
@@ -285,6 +284,37 @@ public class TraceExpression {
 		} else{
 			throw new NoMonitoringSafePartitionFoundException();
 		}
+	}
+	
+	/**
+	 * Get a random Monitoring Safe partition
+	 * @param conditions that must be satisfied by the partition returned
+	 * @return the monitoring safe partition selected randomly
+	 *
+	 * @throws NoMonitoringSafePartitionFoundException if no monitoring safe partition can be retrieved
+	 */
+	public Partition<String> getRandomMonitoringSafePartition(List<Condition<String>> conditions) throws NoMonitoringSafePartitionFoundException{
+		Query query = new Query("get_monitoring_safe(MSPartition, " + protocolName + ")");
+		Partition<String> lastGoodPartition = null;
+		while(query.hasMoreSolutions()){
+			Compound partitionTerm = (Compound) query.nextSolution().get("MSPartition");
+			Partition<String> partitionAux = Partition.extractOnePartitionFromTerm(partitionTerm);
+			for(Condition<String> cond : conditions){
+				if(cond.isConsistent(partitionAux)){
+					lastGoodPartition = partitionAux;
+					if(new Random().nextBoolean()){
+						query.close();
+						return partitionAux;
+					}
+				}
+			}
+		}
+		if(lastGoodPartition != null){
+			return lastGoodPartition;
+		} else{
+			throw new NoMonitoringSafePartitionFoundException("No monitoring safe partition found consistent with the conditions passed as arguments");
+		}
+		
 	}
 
 	/**

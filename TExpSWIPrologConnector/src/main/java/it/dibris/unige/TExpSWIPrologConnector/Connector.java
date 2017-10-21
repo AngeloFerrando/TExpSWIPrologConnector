@@ -9,9 +9,18 @@ import org.jpl7.Query;
 import it.dibris.unige.TExpSWIPrologConnector.exceptions.InitializationException;
 import it.dibris.unige.TExpSWIPrologConnector.texp.TraceExpression;
 
+/**
+ * Class handling the communications with the SWI-Prolog library.
+ * Using the static methods of this class we can initialize, add an event and verify the current event 
+ * (the three main steps of the runtime verification process through trace expressions) 
+ * 
+ * @author angeloferrando
+ *
+ */
 public class Connector {
 	
 	private static long local_epoch = new Date().getTime();
+	
 	
 	/**
 	 * initialize the RV SWI-Prolog library for a single monitor
@@ -19,6 +28,7 @@ public class Connector {
 	 * @param tExp the trace expression that will be used to guide the RV process
 	 * @param logFileName the name of the log file will be generated
 	 * @param monitorID the id of the monitor 
+	 * @param roleSet the set of agents on which distribute tExp
 	 * 
 	 * @throws PrologException if an error occurred during the execution of the query
 	 */
