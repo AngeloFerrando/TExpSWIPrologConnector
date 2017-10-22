@@ -490,16 +490,22 @@ pretty_print_list([H|[]]) :-
 % Permutations %
 %%%%%%%%%%%%%%%%
 
-permutations(Set, Permutations) :-
-  permutations_aux([], Set, Permutations).
+permutations([], []).
+permutations([H|T], T1) :-
+  permutations_aux(H, T, T1),
+  length([H|T], N1),
+  length(T1, N2),
+  N1 \== N2.
+permutations([H|T], T3) :-
+  permutations(T, T2),
+  append([H], T2, T3).
 
-permutations_aux(S, [], [S]) :- S \= [].
+permutations_aux(S, [], [S]).
 permutations_aux(S, [H|T], T1) :-
-  append(S, H, S1),
-  permutations_aux(S1, T, T1).
-permutations_aux(S, [H|T], [S|T1]) :-
-  S \= [],
-  permutations_aux(H, T, T1).
+  append(S, H, H1),
+  permutations_aux(H1, T, T1).
+permutations_aux(S, [H|T], [H|T1]) :-
+  permutations_aux(S, T, T1).
 
 get_monitoring_safe(P, ProtocolName) :-
   trace_expression(ProtocolName, T),
