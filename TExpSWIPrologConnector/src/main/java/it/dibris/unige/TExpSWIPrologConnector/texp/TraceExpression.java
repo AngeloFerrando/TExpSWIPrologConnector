@@ -366,7 +366,7 @@ public class TraceExpression {
 	}*/
 
 	/**
-	 * Get the first Monitoring Safe partition generated
+	 * Get the first pseudo Minimal Monitoring Safe partition generated
 	 * @param conditions that must be satisfied by the partition returned
 	 * @return the monitoring safe partition selected
 	 *
@@ -497,7 +497,7 @@ public class TraceExpression {
 	}*/
 
 	/**
-	 * Get the set of Monitoring Safe partitions (MS)
+	 * Get the set of pseudo Minimal Monitoring Safe partitions (MS)
 	 * @param conditions that must be satisfied by the partitions returned
 	 * @return the set of Monitoring Safe partitions satisfying the conditions
 	 *
