@@ -1,5 +1,6 @@
 package it.dibris.unige.TExpSWIPrologConnector;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Set;
 
@@ -20,7 +21,6 @@ import it.dibris.unige.TExpSWIPrologConnector.texp.TraceExpression;
 public class Connector {
 	
 	private static long local_epoch = new Date().getTime();
-	
 	
 	/**
 	 * initialize the RV SWI-Prolog library for a single monitor

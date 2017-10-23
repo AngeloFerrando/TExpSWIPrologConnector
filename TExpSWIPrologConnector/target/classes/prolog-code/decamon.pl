@@ -490,22 +490,32 @@ pretty_print_list([H|[]]) :-
 % Permutations %
 %%%%%%%%%%%%%%%%
 
-permutations([], []).
-permutations([H|T], T1) :-
-  permutations_aux(H, T, T1),
-  length([H|T], N1),
-  length(T1, N2),
-  N1 \== N2.
-permutations([H|T], T3) :-
-  permutations(T, T2),
-  append([H], T2, T3).
 
-permutations_aux(S, [], [S]).
-permutations_aux(S, [H|T], T1) :-
-  append(S, H, H1),
-  permutations_aux(H1, T, T1).
-permutations_aux(S, [H|T], [H|T1]) :-
-  permutations_aux(S, T, T1).
+
+permutations([], []).
+permutations([H|T], P4) :-
+  permutations(T, P2),
+  (member(S, P2); S = []),
+  append(H, S, S1),
+  delete(P2, S, P3),
+  append([S1], P3, P4).
+
+
+% permutations([], []).
+% permutations([H|T], T1) :-
+%   permutations_aux(H, T, T1).
+% permutations_aux(S, [], [S]).
+% permutations_aux(S, [H|T], T1) :-
+%   length(H, N), N == 1,
+%   append(S, H, H1),
+%   permutations_aux(H1, T, T1).
+% permutations_aux(S, [H|T], [H|T1]) :-
+%   permutations_aux(S, T, T1).
+% permutations_aux(S, [H|T], T3) :-
+%   member(H1, T), !,
+%   delete(T, H1, T1),
+%   append(H, H1, H2),
+%   permutations_aux(S, [H2|T1], T3).
 
 get_monitoring_safe(P, ProtocolName) :-
   trace_expression(ProtocolName, T),

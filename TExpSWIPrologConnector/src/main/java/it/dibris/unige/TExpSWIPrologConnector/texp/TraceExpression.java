@@ -22,6 +22,7 @@ import org.jpl7.Term;
 
 import it.dibris.unige.TExpSWIPrologConnector.JPL.JPLInitializer;
 import it.dibris.unige.TExpSWIPrologConnector.decentralized.Condition;
+import it.dibris.unige.TExpSWIPrologConnector.decentralized.ConditionsFactory;
 import it.dibris.unige.TExpSWIPrologConnector.decentralized.Partition;
 import it.dibris.unige.TExpSWIPrologConnector.exceptions.NoMonitoringSafePartitionFoundException;
 import it.dibris.unige.TExpSWIPrologConnector.exceptions.TraceExpressionFileFormatException;
@@ -267,13 +268,10 @@ public class TraceExpression {
 	 * @throws NoMonitoringSafePartitionFoundException if no monitoring safe partition can be retrieved
 	 */
 	public Partition<String> getRandomPseudoMinimalMonitoringSafePartition(List<Condition<String>> conditions) throws NoMonitoringSafePartitionFoundException{
-		/*if(conditions == null){
-			throw new NullPointerException("conditions must not be null");
-		}*/
-		int random = new Random().nextInt();
+		/*int random = new Random().nextInt();
 		List<Partition<String>> msPartitions = new ArrayList<>();
 		int count = 0;
-		for(Partition<String> p : getMonitoringSafePartitions(conditions)){
+		for(Partition<String> p : getPseudoMinimalMonitoringSafePartitions(conditions)){
 			if(count == random){
 				return p;
 			}
@@ -283,7 +281,20 @@ public class TraceExpression {
 			return msPartitions.get(random % msPartitions.size());
 		} else{
 			throw new NoMonitoringSafePartitionFoundException();
+		}*/
+		
+		Random r = new Random();
+		Partition<String> lastGoodPartition = null;
+		for(Partition<String> p : getPseudoMinimalMonitoringSafePartitions(conditions)){
+			lastGoodPartition = p;
+			if(r.nextBoolean()){
+				break;
+			}
 		}
+		if(lastGoodPartition == null){
+			throw new NoMonitoringSafePartitionFoundException();
+		}
+		return lastGoodPartition;
 	}
 	
 	/**
@@ -294,7 +305,7 @@ public class TraceExpression {
 	 * @throws NoMonitoringSafePartitionFoundException if no monitoring safe partition can be retrieved
 	 */
 	public Partition<String> getRandomMonitoringSafePartition(List<Condition<String>> conditions) throws NoMonitoringSafePartitionFoundException{
-		Query query = new Query("get_monitoring_safe(MSPartition, " + protocolName + ")");
+		/*Query query = new Query("get_monitoring_safe(MSPartition, " + protocolName + ")");
 		Partition<String> lastGoodPartition = null;
 		while(query.hasMoreSolutions()){
 			Compound partitionTerm = (Compound) query.nextSolution().get("MSPartition");
@@ -318,8 +329,19 @@ public class TraceExpression {
 			return lastGoodPartition;
 		} else{
 			throw new NoMonitoringSafePartitionFoundException("No monitoring safe partition found consistent with the conditions passed as arguments");
+		}*/
+		Random r = new Random();
+		Partition<String> lastGoodPartition = null;
+		for(Partition<String> p : getMonitoringSafePartitions(conditions)){
+			lastGoodPartition = p;
+			if(r.nextBoolean()){
+				break;
+			}
 		}
-		
+		if(lastGoodPartition == null){
+			throw new NoMonitoringSafePartitionFoundException();
+		}
+		return lastGoodPartition;
 	}
 
 	/**
@@ -350,6 +372,25 @@ public class TraceExpression {
 	 *
 	 * @throws NoMonitoringSafePartitionFoundException if no monitoring safe partition can be retrieved
 	 */
+	public Partition<String> getFirstPseudoMinimalMonitoringSafePartition(List<Condition<String>> conditions) throws NoMonitoringSafePartitionFoundException{
+		/*if(conditions == null){
+			throw new NullPointerException("conditions must not be null");
+		}*/
+		Iterator<Partition<String>> itPartitions = getPseudoMinimalMonitoringSafePartitions(conditions).iterator();
+		if(itPartitions.hasNext()){
+			return itPartitions.next();
+		} else{
+			throw new NoMonitoringSafePartitionFoundException();
+		}
+	}
+
+	/**
+	 * Get the first Monitoring Safe partition generated
+	 * @param conditions that must be satisfied by the partition returned
+	 * @return the monitoring safe partition selected
+	 *
+	 * @throws NoMonitoringSafePartitionFoundException if no monitoring safe partition can be retrieved
+	 */
 	public Partition<String> getFirstMonitoringSafePartition(List<Condition<String>> conditions) throws NoMonitoringSafePartitionFoundException{
 		/*if(conditions == null){
 			throw new NullPointerException("conditions must not be null");
@@ -361,7 +402,7 @@ public class TraceExpression {
 			throw new NoMonitoringSafePartitionFoundException();
 		}
 	}
-
+	
 	/**
 	 * Get the set of Monitoring Safe partitions (MS)
 	 * @param conditions that must be satisfied by the partitions returned
@@ -461,12 +502,96 @@ public class TraceExpression {
 	 * @return the set of Monitoring Safe partitions satisfying the conditions
 	 *
 	 */
-	public Iterable<Partition<String>> getMonitoringSafePartitions(List<Condition<String>> conditions){
-		/*if(conditions == null){
-			throw new NullPointerException("conditions must not be null");
-		}*/
-
+	public Iterable<Partition<String>> getPseudoMinimalMonitoringSafePartitions(List<Condition<String>> conditions){
 		Query query = new Query("decOne(MSPartition, " + protocolName + ")");
+		return new Iterable<Partition<String>>() {
+
+			@Override
+			public Iterator<Partition<String>> iterator() {
+				return new Iterator<Partition<String>>() {
+
+					Partition<String> lastPartition;
+					boolean end = false;
+
+					@Override
+					public Partition<String> next() {
+						if(end){
+							throw new NoSuchElementException();
+						}
+						if(lastPartition != null){
+							Partition<String> partitionAux = lastPartition;
+							lastPartition = null;
+							return partitionAux;
+						} else{
+							Partition<String> partitionAux = null;
+							boolean repeat;
+							do{
+								repeat = false;
+								if(query.hasMoreSolutions()){
+									Compound partitionTerm = (Compound) query.nextSolution().get("MSPartition");
+									partitionAux = Partition.extractOnePartitionFromTerm(partitionTerm);
+									if(conditions != null){
+										for(Condition<String> cond : conditions){
+											if(!cond.isConsistent(lastPartition)){
+												repeat = true;
+												break;
+											}
+										}
+									}
+								} else{
+									query.close();
+									end = true;
+									throw new NoSuchElementException();
+								}
+							} while(repeat);
+							return partitionAux;
+						}
+					}
+
+					@Override
+					public boolean hasNext() {
+						if(end){
+							return false;
+						}
+						if(lastPartition != null){
+							return true;
+						} else{
+							boolean repeat;
+							do{
+								repeat = false;
+								if(query.hasMoreSolutions()){
+									Compound partitionTerm = (Compound) query.nextSolution().get("MSPartition");
+									lastPartition = Partition.extractOnePartitionFromTerm(partitionTerm);
+									if(conditions != null){
+										for(Condition<String> cond : conditions){
+											if(!cond.isConsistent(lastPartition)){
+												repeat = true;
+												break;
+											}
+										}
+									}
+								} else{
+									query.close();
+									end = true;
+									return false;
+								}
+							} while(repeat);
+							return true;
+						}
+					}
+				};
+			}
+		};
+	}
+	
+	/**
+	 * Get the set of Monitoring Safe partitions (MS)
+	 * @param conditions that must be satisfied by the partitions returned
+	 * @return the set of Monitoring Safe partitions satisfying the conditions
+	 *
+	 */
+	public Iterable<Partition<String>> getMonitoringSafePartitions(List<Condition<String>> conditions){
+		Query query = new Query("get_monitoring_safe(MSPartition, " + protocolName + ")");
 		return new Iterable<Partition<String>>() {
 
 			@Override
@@ -582,6 +707,19 @@ public class TraceExpression {
 		query1.close();
 		query2.close();
 		return !res1 && res2;
+	}
+	
+	public static void main(String[] args) throws IOException{
+		JPLInitializer.init();
+		
+		TraceExpression tExp = new TraceExpression(args[0]);
+		List<Condition<String>> conditions = new ArrayList<>();
+		conditions.add(ConditionsFactory.createAtLeastNumberAgentsForConstraintCondition(2));
+		conditions.add(ConditionsFactory.createAtMostNumberAgentsForConstraintCondition(2));
+		
+		for(Partition<String> p : tExp.getMonitoringSafePartitions(conditions)){
+			System.out.println(p);
+		}
 	}
 
 }
