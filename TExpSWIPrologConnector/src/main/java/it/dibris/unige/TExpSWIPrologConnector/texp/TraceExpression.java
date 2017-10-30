@@ -712,10 +712,9 @@ public class TraceExpression {
 	public static void main(String[] args) throws IOException{
 		JPLInitializer.init();
 		
-		TraceExpression tExp = new TraceExpression(args[0]);
+		TraceExpression tExp = new TraceExpression("/Users/angeloferrando/Documents/workspace/rivertools_test/src-gen/ping_pong.pl");
 		List<Condition<String>> conditions = new ArrayList<>();
-		conditions.add(ConditionsFactory.createAtLeastNumberAgentsForConstraintCondition(2));
-		conditions.add(ConditionsFactory.createAtMostNumberAgentsForConstraintCondition(2));
+		conditions.add(ConditionsFactory.createMustBeSplitCondition("alice", "bob"));
 		
 		for(Partition<String> p : tExp.getMonitoringSafePartitions(conditions)){
 			System.out.println(p);

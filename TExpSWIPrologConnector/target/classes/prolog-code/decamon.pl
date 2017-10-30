@@ -45,7 +45,7 @@
 
 
 :- use_module(library(coinduction)).
-:- dynamic match/2.
+:- dynamic match/3.
 :- coinductive pre_processing/4.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -216,11 +216,11 @@ pre_processing(T1|T2, TP1|TP2, InvolvedAgents, ProtocolName) :-
   pre_processing(T1, TP1, InvolvedAgents, ProtocolName),
   pre_processing(T2, TP2, InvolvedAgents, ProtocolName).
 pre_processing(T1*T2, TP1*TP2, InvolvedAgents, ProtocolName) :-
-  may_eventually_halt(ProtocolName, T1), !,
+  %may_eventually_halt(ProtocolName, T1), !,
   pre_processing(T1, TP1, InvolvedAgents, ProtocolName),
   pre_processing(T2, TP2, InvolvedAgents, ProtocolName).
-pre_processing(T1*_, TP1, InvolvedAgents, ProtocolName) :-
-  pre_processing(T1, TP1, InvolvedAgents, ProtocolName).
+%pre_processing(T1*_, TP1, InvolvedAgents, ProtocolName) :-
+%  pre_processing(T1, TP1, InvolvedAgents, ProtocolName).
 pre_processing(T1/\T2, TP1/\TP2, InvolvedAgents, ProtocolName) :-
   pre_processing(T1, TP1, InvolvedAgents, ProtocolName),
   pre_processing(T2, TP2, InvolvedAgents, ProtocolName).
@@ -736,9 +736,9 @@ is_monitoring_safe(Partition, T, ProtocolName) :-
   empty_assoc(Assoc),
   threshold(Threshold),
   filter_events(T, TFiltered, Threshold, ProtocolName),
-  involved(TFiltered, InvolvedAgents, ProtocolName),
-  pre_processing(TFiltered, T1, InvolvedAgents, ProtocolName), !,
-  is_monitoring_safe(Partition, T1, Assoc, ProtocolName), !.
+  %involved(TFiltered, InvolvedAgents, ProtocolName),
+  %pre_processing(TFiltered, T1, InvolvedAgents, ProtocolName), !,
+  is_monitoring_safe(Partition, TFiltered, Assoc, ProtocolName), !.
 
 is_monitoring_safe(_, epsilon, _, _) :- !.
 is_monitoring_safe(_, T, Assoc, _) :-
