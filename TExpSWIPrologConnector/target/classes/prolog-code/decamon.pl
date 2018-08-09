@@ -66,7 +66,7 @@ decAMonJADE(MMsPartitions, ProtocolName) :-
 % in the interaction type passed as first argument
 % Example: involved_type(msg1, [alice, bob]).
 involved_type(IntType, InvolvedAgents, ProtocolName) :-
-  findall(Agent, (match(ProtocolName, msg(_, sender(Agent), _, _, _, _), IntType); match(ProtocolName, msg(_, _, receiver(Agent), _, _, _), IntType)), Aux),
+  findall(Agent, (match(ProtocolName, msg(_, sender(Agent), _, _, s, _), IntType); match(ProtocolName, msg(_, _, receiver(Agent), _, r, _), IntType)), Aux),
   list_to_set(Aux, InvolvedAgents).
 
 involved(InvolvedAgents, ProtocolName) :-
@@ -633,7 +633,7 @@ max_group_cardinality_it(MMSs, Start, End) :-
 max_group_cardinality_it(MMSs, End, End) :-
    max_group_cardinality(MMSs, End, MAX),
    length(MAX, LMAX),
-   write('\nNumber of MMSs whose whose largest group dimension is lesses or equal to '), write(End), write(': '), write(LMAX), write('\n').
+   write('\nNumber of MMSs whose largest group dimension is lesses or equal to '), write(End), write(': '), write(LMAX), write('\n').
 
 max_group_cardinality([], _MaxCard, []).
 max_group_cardinality([H|T], MaxCard, [H|Res]):-
